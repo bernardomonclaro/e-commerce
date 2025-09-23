@@ -66,8 +66,26 @@ Compila em watch e sobe o servidor na porta 3000:
 ```
 npm start
 ```
-- O script usa `tsc-watch` e executa `node --env-file=.env ./lib/app.js`.
+- O script usa `tsc-watch` e executa `node --env-file=.env ./lib/index.js`.
 - A API fica disponível em `http://localhost:3000`.
+
+## Swagger (Documentação da API)
+- Geração do arquivo OpenAPI:
+  - Comando: `npm run swagger`
+  - Saída: `src/docs/swagger-output.json`
+- Acesso à UI:
+  - Local: `http://localhost:3000/docs`
+  - Produção (Firebase Functions/Hosting): `https://<seu-dominio-ou-hosting>/docs`
+- Segurança:
+  - Definido `bearerAuth` (JWT). Na UI do Swagger, clique em “Authorize” e informe apenas o token JWT (sem prefixar `Bearer`).
+- Como atualizar após mudar rotas:
+  1. Altere/adicione suas rotas em `src/routes/*`.
+  2. Rode `npm run swagger` para regenerar o `swagger-output.json`.
+  3. Reinicie o servidor se necessário para recarregar o arquivo.
+- Configurações do Swagger:
+  - Arquivo: `swagger.js:1` — título, descrição, `servers` e schemas.
+  - Rotas escaneadas: `src/routes/index.ts:1` (ponto de entrada das rotas).
+  - Middleware/UI: `src/routes/swagger-docs.route.ts:1` (monta `/docs`).
 
 ## Autenticação e Permissões
 - Middleware de autenticação lê `Authorization: Bearer <token>` e valida via Firebase Admin.
@@ -180,4 +198,3 @@ curl -s -X POST http://localhost:3000/orders \
 
 ## Licença
 ISC
-
