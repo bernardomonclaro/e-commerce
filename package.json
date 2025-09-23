@@ -2,12 +2,18 @@
   "name": "ecommerce-api",
   "version": "1.0.0",
   "exports": "./lib/index.js",
+  "main": "lib/firebase.js",
   "type": "module",
   "engines": {
     "node": "20"
   },
   "scripts": {
-    "start": "npx tsc-watch --onSuccess \"node --env-file=.env ./lib/app.js\" --onFailure \"echo Build failed\""
+    "build": "tsc",
+    "swagger": "node ./swagger.js",
+    "start": "npx tsc-watch --onSuccess \"node --env-file=.env ./lib/index.js\" --onFailure \"echo Build failed\"",
+    "deploy:gcf": "npm run build && gcloud functions deploy api --gen2 --region=us-central1 --runtime=nodejs20 --source=lib --entry-point=api --trigger-http",
+    "deploy:firebase": "npm run build && firebase deploy --only functions",
+    "serve:firebase": "npm run build && firebase emulators:start --only functions"
   },
   "keywords": [],
   "author": "",
@@ -21,12 +27,15 @@
     "express-async-handler": "^1.2.0",
     "file-type": "^21.0.0",
     "firebase": "^12.1.0",
-    "firebase-admin": "^13.4.0"
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^4.6.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.6",
     "@types/express": "^5.0.3",
     "@types/node": "^24.2.1",
+    "@types/swagger-ui-express": "^4.1.8",
     "swagger-autogen": "^2.23.7",
     "tsc-watch": "^7.1.1",
     "typescript": "^5.9.2"

@@ -21,7 +21,7 @@ export class OrderRepository {
 
         // Itens do pedido
         const itensRef = orderRef.collection("itens").withConverter(orderItemConverter);
-        for (let item of order.itens!) {
+        for (const item of order.itens!) {
             batch.create(itensRef.doc(), item);
         }
 
@@ -53,7 +53,7 @@ export class OrderRepository {
         return snapshot.docs.map(doc => doc.data());
     }
 
-    async getItens(orderId: string): Promise<OrderItem[]> {
+    async getItems(orderId: string): Promise<OrderItem[]> {
         const orderRef = this.collection.doc(orderId);
         const snapshot = await orderRef.collection("itens").withConverter(orderItemConverter).get();
         return snapshot.docs.map(doc => doc.data());
@@ -64,7 +64,7 @@ export class OrderRepository {
         const snapshot = await this.collection.doc(id).get();
         const order = snapshot.data();
         if (!order) return null;
-        order.itens = await this.getItens(id);
+        order.itens = await this.getItems(id);
         return order;
     }
 

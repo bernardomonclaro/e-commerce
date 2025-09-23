@@ -33,7 +33,7 @@ export class OrderService {
         }
         order.formaPagamento = paymentMethod;
 
-        for (let item of order.itens!) {
+        for (const item of order.itens!) {
             const product = await this.productRepository.getProductById(item.produto.id)
             if (!product) {
                 throw new NotFoundError("Product not found")
@@ -48,8 +48,8 @@ export class OrderService {
         return this.orderRepository.search(query)
     }
 
-    async getItens(orderId: string): Promise<OrderItem[]> {
-        return this.orderRepository.getItens(orderId)
+    async getItems(orderId: string): Promise<OrderItem[]> {
+        return this.orderRepository.getItems(orderId)
     }
 
     async getOrderById(id: string): Promise<Order> {
